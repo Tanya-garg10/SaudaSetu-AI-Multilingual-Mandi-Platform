@@ -1,0 +1,120 @@
+{
+    "project": {
+        "name": "SaudaSetu AI",
+        "description": "AI-powered platform for Indian local markets with real-time translation, price discovery, and intelligent negotiation",
+        "version": "1.0.0",
+        "type": "full-stack",
+        "created": "2024-01-26",
+        "technologies": [
+            "React",
+            "TypeScript",
+            "Node.js",
+            "Express",
+            "MongoDB",
+            "Socket.io",
+            "Tailwind CSS",
+            "AI/ML"
+        ]
+    },
+    "structure": {
+        "frontend": {
+            "framework": "React + TypeScript",
+            "styling": "Tailwind CSS",
+            "stateManagement": "Zustand + React Query",
+            "routing": "React Router",
+            "realtime": "Socket.io Client"
+        },
+        "backend": {
+            "runtime": "Node.js",
+            "framework": "Express + TypeScript",
+            "database": "MongoDB + Mongoose",
+            "authentication": "JWT",
+            "validation": "Joi",
+            "realtime": "Socket.io"
+        },
+        "shared": {
+            "types": "TypeScript interfaces",
+            "constants": "Shared constants"
+        }
+    },
+    "features": {
+        "core": [
+            "Real-time multilingual translation",
+            "AI-driven price discovery",
+            "Intelligent negotiation engine",
+            "Real-time communication",
+            "User authentication",
+            "Product management",
+            "Responsive dashboards"
+        ],
+        "ai": [
+            "Translation service (12 Indian languages)",
+            "Price discovery engine",
+            "Negotiation intelligence",
+            "Market trend analysis",
+            "Fairness scoring"
+        ],
+        "realtime": [
+            "WebSocket communication",
+            "Live negotiations",
+            "Typing indicators",
+            "Status updates"
+        ]
+    },
+    "pages": {
+        "frontend": [
+            "Home - Landing page with features",
+            "Marketplace - Product browsing and search",
+            "BuyerDashboard - Buyer analytics and negotiations",
+            "VendorDashboard - Vendor product and sales management",
+            "NegotiationPage - Real-time negotiation interface",
+            "ProfilePage - User profile management",
+            "LoginPage - User authentication",
+            "RegisterPage - User registration"
+        ]
+    },
+    "api": {
+        "endpoints": [
+            "/auth - Authentication (login, register, profile)",
+            "/products - Product CRUD operations",
+            "/negotiations - Negotiation management",
+            "/price-discovery - Market price analysis",
+            "/translation - Language translation services"
+        ],
+        "websocket": [
+            "negotiation:join - Join negotiation room",
+            "negotiation:message - Send/receive messages",
+            "negotiation:offer - Handle price offers",
+            "negotiation:status - Status updates"
+        ]
+    },
+    "database": {
+        "models": [
+            "User - User profiles and authentication",
+            "Product - Product listings and inventory",
+            "Negotiation - Negotiation sessions and messages"
+        ],
+        "indexes": [
+            "User: email, phone (unique)",
+            "Product: category, location, vendor",
+            "Negotiation: participants, status, dates"
+        ]
+    },
+    "deployment": {
+        "development": {
+            "frontend": "http://localhost:5173",
+            "backend": "http://localhost:3000",
+            "database": "mongodb://localhost:27017/saudasetu"
+        },
+        "scripts": [
+            "setup.sh - Unix/Linux/macOS setup",
+            "setup.bat - Windows setup"
+        ]
+    },
+    "documentation": [
+        "README.md - Project overview and setup",
+        "API.md - Complete API documentation",
+        "FEATURES.md - Detailed feature descriptions",
+        "NEGOTIATION_ENGINE.md - AI negotiation system details"
+    ]
+}
