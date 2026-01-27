@@ -3,12 +3,12 @@ import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { negotiationsApi, priceDiscoveryApi } from '../services/api';
 import { useAuthStore } from '../stores/authStore';
-import { 
-  ShoppingCart, 
-  MessageCircle, 
-  TrendingUp, 
-  Clock, 
-  CheckCircle, 
+import {
+  ShoppingCart,
+  MessageCircle,
+  TrendingUp,
+  Clock,
+  CheckCircle,
   XCircle,
   BarChart3,
   Search
@@ -25,16 +25,16 @@ const BuyerDashboard: React.FC = () => {
 
   const { data: trends } = useQuery(
     'market-trends',
-    () => priceDiscoveryApi.getTrends({ 
+    () => priceDiscoveryApi.getTrends({
       categories: 'vegetables,fruits,grains,spices',
       city: user?.location.city,
       state: user?.location.state
     })
   );
 
-  const activeNegotiations = negotiations?.data?.negotiations?.filter(n => n.status === 'active') || [];
-  const completedNegotiations = negotiations?.data?.negotiations?.filter(n => n.status === 'completed') || [];
-  const totalSavings = completedNegotiations.reduce((sum, n) => {
+  const activeNegotiations = negotiations?.data?.negotiations?.filter((n: any) => n.status === 'active') || [];
+  const completedNegotiations = negotiations?.data?.negotiations?.filter((n: any) => n.status === 'completed') || [];
+  const totalSavings = completedNegotiations.reduce((sum: number, n: any) => {
     const product = n.productId as any;
     const savings = (product?.basePrice || 0) - (n.finalPrice || 0);
     return sum + (savings > 0 ? savings * (n.finalQuantity || 0) : 0);
@@ -101,8 +101,8 @@ const BuyerDashboard: React.FC = () => {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Avg Deal Size</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  ₹{completedNegotiations.length > 0 
-                    ? (completedNegotiations.reduce((sum, n) => sum + (n.finalPrice || 0) * (n.finalQuantity || 0), 0) / completedNegotiations.length).toFixed(0)
+                  ₹{completedNegotiations.length > 0
+                    ? (completedNegotiations.reduce((sum: number, n: any) => sum + (n.finalPrice || 0) * (n.finalQuantity || 0), 0) / completedNegotiations.length).toFixed(0)
                     : '0'
                   }
                 </p>
@@ -147,11 +147,10 @@ const BuyerDashboard: React.FC = () => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm ${
-                    activeTab === tab.id
-                      ? 'border-green-500 text-green-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
+                  className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm ${activeTab === tab.id
+                    ? 'border-green-500 text-green-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    }`}
                 >
                   {tab.icon}
                   <span>{tab.label}</span>
@@ -168,11 +167,10 @@ const BuyerDashboard: React.FC = () => {
                   {negotiations?.data?.negotiations?.slice(0, 5).map((negotiation: any) => (
                     <div key={negotiation._id} className="flex items-center justify-between py-3 border-b border-gray-200 last:border-b-0">
                       <div className="flex items-center space-x-3">
-                        <div className={`p-2 rounded-full ${
-                          negotiation.status === 'active' ? 'bg-blue-100' :
+                        <div className={`p-2 rounded-full ${negotiation.status === 'active' ? 'bg-blue-100' :
                           negotiation.status === 'completed' ? 'bg-green-100' :
-                          'bg-red-100'
-                        }`}>
+                            'bg-red-100'
+                          }`}>
                           {negotiation.status === 'active' ? (
                             <Clock className="h-4 w-4 text-blue-600" />
                           ) : negotiation.status === 'completed' ? (
@@ -184,7 +182,7 @@ const BuyerDashboard: React.FC = () => {
                         <div>
                           <p className="font-medium text-gray-900">{negotiation.productId?.name}</p>
                           <p className="text-sm text-gray-500">
-                            {negotiation.status === 'completed' 
+                            {negotiation.status === 'completed'
                               ? `Completed at ₹${negotiation.finalPrice}/${negotiation.productId?.unit}`
                               : `Current offer: ₹${negotiation.currentOffer?.price}/${negotiation.productId?.unit}`
                             }
@@ -221,11 +219,10 @@ const BuyerDashboard: React.FC = () => {
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center space-x-3">
                           <h4 className="font-medium text-gray-900">{negotiation.productId?.name}</h4>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            negotiation.status === 'active' ? 'bg-blue-100 text-blue-800' :
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${negotiation.status === 'active' ? 'bg-blue-100 text-blue-800' :
                             negotiation.status === 'completed' ? 'bg-green-100 text-green-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
+                              'bg-red-100 text-red-800'
+                            }`}>
                             {negotiation.status}
                           </span>
                         </div>
@@ -236,7 +233,7 @@ const BuyerDashboard: React.FC = () => {
                           View Details
                         </Link>
                       </div>
-                      
+
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div>
                           <p className="text-gray-500">Vendor</p>
@@ -264,24 +261,22 @@ const BuyerDashboard: React.FC = () => {
             {activeTab === 'trends' && (
               <div className="space-y-6">
                 <h3 className="text-lg font-medium text-gray-900">Market Trends in {user?.location.city}</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {trends?.data?.map((trend: any) => (
                     <div key={trend.category} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
                         <h4 className="font-medium text-gray-900 capitalize">{trend.category}</h4>
-                        <span className={`flex items-center space-x-1 text-sm ${
-                          trend.marketTrend === 'rising' ? 'text-red-600' :
+                        <span className={`flex items-center space-x-1 text-sm ${trend.marketTrend === 'rising' ? 'text-red-600' :
                           trend.marketTrend === 'falling' ? 'text-green-600' :
-                          'text-gray-600'
-                        }`}>
-                          <TrendingUp className={`h-4 w-4 ${
-                            trend.marketTrend === 'falling' ? 'transform rotate-180' : ''
-                          }`} />
+                            'text-gray-600'
+                          }`}>
+                          <TrendingUp className={`h-4 w-4 ${trend.marketTrend === 'falling' ? 'transform rotate-180' : ''
+                            }`} />
                           <span>{trend.marketTrend}</span>
                         </span>
                       </div>
-                      
+
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-500">Average Price:</span>

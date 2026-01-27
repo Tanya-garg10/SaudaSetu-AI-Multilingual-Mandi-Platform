@@ -1,13 +1,9 @@
 import { io, Socket } from 'socket.io-client';
-import { SocketEvents } from '@/shared/types';
 
 class SocketService {
   private socket: Socket | null = null;
-  private token: string | null = null;
 
   connect(token: string) {
-    this.token = token;
-    
     this.socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:3000', {
       auth: {
         token: token

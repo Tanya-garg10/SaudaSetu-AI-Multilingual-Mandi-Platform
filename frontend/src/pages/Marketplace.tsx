@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { productsApi } from '../services/api';
-import { Product } from '@/shared/types';
-import { Search, Filter, MapPin, Star, TrendingUp } from 'lucide-react';
+import { Product } from '../types/shared';
+import { Search, Filter, MapPin, TrendingUp } from 'lucide-react';
 
 const Marketplace: React.FC = () => {
   const [filters, setFilters] = useState({
@@ -204,11 +204,10 @@ const Marketplace: React.FC = () => {
                       </div>
                     )}
                     <div className="absolute top-2 right-2">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        product.category === 'vegetables' ? 'bg-green-100 text-green-800' :
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${product.category === 'vegetables' ? 'bg-green-100 text-green-800' :
                         product.category === 'fruits' ? 'bg-orange-100 text-orange-800' :
-                        'bg-blue-100 text-blue-800'
-                      }`}>
+                          'bg-blue-100 text-blue-800'
+                        }`}>
                         {product.category}
                       </span>
                     </div>
@@ -217,7 +216,7 @@ const Marketplace: React.FC = () => {
                   <div className="p-4">
                     <h3 className="font-semibold text-gray-900 mb-2">{product.name}</h3>
                     <p className="text-sm text-gray-600 mb-3 line-clamp-2">{product.description}</p>
-                    
+
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center space-x-2">
                         <span className="text-2xl font-bold text-green-600">
@@ -265,21 +264,20 @@ const Marketplace: React.FC = () => {
                   >
                     Previous
                   </button>
-                  
+
                   {[...Array(data.data.pagination.pages)].map((_, i) => (
                     <button
                       key={i + 1}
                       onClick={() => setPage(i + 1)}
-                      className={`px-4 py-2 border rounded-lg ${
-                        page === i + 1
-                          ? 'bg-green-600 text-white border-green-600'
-                          : 'border-gray-300 hover:bg-gray-50'
-                      }`}
+                      className={`px-4 py-2 border rounded-lg ${page === i + 1
+                        ? 'bg-green-600 text-white border-green-600'
+                        : 'border-gray-300 hover:bg-gray-50'
+                        }`}
                     >
                       {i + 1}
                     </button>
                   ))}
-                  
+
                   <button
                     onClick={() => setPage(page + 1)}
                     disabled={page === data.data.pagination.pages}

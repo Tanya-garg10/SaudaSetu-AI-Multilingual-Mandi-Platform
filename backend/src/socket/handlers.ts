@@ -86,12 +86,12 @@ export const setupSocketHandlers = (io: Server) => {
 
         // Translate message if needed
         let translatedMessage = data.message;
-        if (sender?.preferredLanguage !== receiver.preferredLanguage) {
+        if (sender?.preferredLanguage !== (receiver as any).preferredLanguage) {
           try {
             const translation = await translationService.translate(
               data.message,
               sender?.preferredLanguage as any || 'en',
-              receiver.preferredLanguage as any
+              (receiver as any).preferredLanguage as any
             );
             translatedMessage = translation.translatedText;
           } catch (error) {
@@ -118,7 +118,7 @@ export const setupSocketHandlers = (io: Server) => {
           negotiation.currentOffer = {
             price: data.offerPrice,
             quantity: data.offerQuantity,
-            proposedBy: socket.userId!
+            proposedBy: socket.userId! as any
           };
         }
 

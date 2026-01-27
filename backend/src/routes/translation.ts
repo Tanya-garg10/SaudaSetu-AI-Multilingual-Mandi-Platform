@@ -1,7 +1,7 @@
 import express from 'express';
 import Joi from 'joi';
 import { translationService } from '../services/translation';
-import { SUPPORTED_LANGUAGES } from '../../../shared/types';
+import { SUPPORTED_LANGUAGES } from '../types/shared';
 
 const router = express.Router();
 

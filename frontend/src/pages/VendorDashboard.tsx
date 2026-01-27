@@ -3,12 +3,12 @@ import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-hot-toast';
 import { productsApi, negotiationsApi } from '../services/api';
 import { useAuthStore } from '../stores/authStore';
-import { 
-  Plus, 
-  Package, 
-  MessageCircle, 
-  TrendingUp, 
-  Edit, 
+import {
+  Plus,
+  Package,
+  MessageCircle,
+  TrendingUp,
+  Edit,
   Trash2,
   Eye,
   BarChart3,
@@ -45,10 +45,10 @@ const VendorDashboard: React.FC = () => {
     }
   );
 
-  const activeProducts = products?.data?.products?.filter(p => p.isActive) || [];
-  const activeNegotiations = negotiations?.data?.negotiations?.filter(n => n.status === 'active') || [];
-  const completedNegotiations = negotiations?.data?.negotiations?.filter(n => n.status === 'completed') || [];
-  const totalRevenue = completedNegotiations.reduce((sum, n) => sum + (n.finalPrice || 0) * (n.finalQuantity || 0), 0);
+  const activeProducts = products?.data?.products?.filter((p: any) => p.isActive) || [];
+  const activeNegotiations = negotiations?.data?.negotiations?.filter((n: any) => n.status === 'active') || [];
+  const completedNegotiations = negotiations?.data?.negotiations?.filter((n: any) => n.status === 'completed') || [];
+  const totalRevenue = completedNegotiations.reduce((sum: number, n: any) => sum + (n.finalPrice || 0) * (n.finalQuantity || 0), 0);
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: <BarChart3 className="h-4 w-4" /> },
@@ -152,11 +152,10 @@ const VendorDashboard: React.FC = () => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm ${
-                    activeTab === tab.id
+                  className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm ${activeTab === tab.id
                       ? 'border-green-500 text-green-600'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
+                    }`}
                 >
                   {tab.icon}
                   <span>{tab.label}</span>
@@ -173,22 +172,20 @@ const VendorDashboard: React.FC = () => {
                   {negotiations?.data?.negotiations?.slice(0, 5).map((negotiation: any) => (
                     <div key={negotiation._id} className="flex items-center justify-between py-3 border-b border-gray-200 last:border-b-0">
                       <div className="flex items-center space-x-3">
-                        <div className={`p-2 rounded-full ${
-                          negotiation.status === 'active' ? 'bg-blue-100' :
-                          negotiation.status === 'completed' ? 'bg-green-100' :
-                          'bg-red-100'
-                        }`}>
-                          <MessageCircle className={`h-4 w-4 ${
-                            negotiation.status === 'active' ? 'text-blue-600' :
-                            negotiation.status === 'completed' ? 'text-green-600' :
-                            'text-red-600'
-                          }`} />
+                        <div className={`p-2 rounded-full ${negotiation.status === 'active' ? 'bg-blue-100' :
+                            negotiation.status === 'completed' ? 'bg-green-100' :
+                              'bg-red-100'
+                          }`}>
+                          <MessageCircle className={`h-4 w-4 ${negotiation.status === 'active' ? 'text-blue-600' :
+                              negotiation.status === 'completed' ? 'text-green-600' :
+                                'text-red-600'
+                            }`} />
                         </div>
                         <div>
                           <p className="font-medium text-gray-900">{negotiation.productId?.name}</p>
                           <p className="text-sm text-gray-500">
-                            Buyer: {negotiation.buyerId?.name} • 
-                            {negotiation.status === 'completed' 
+                            Buyer: {negotiation.buyerId?.name} •
+                            {negotiation.status === 'completed'
                               ? ` Sold at ₹${negotiation.finalPrice}/${negotiation.productId?.unit}`
                               : ` Offer: ₹${negotiation.currentOffer?.price}/${negotiation.productId?.unit}`
                             }
@@ -256,19 +253,18 @@ const VendorDashboard: React.FC = () => {
                           <Package className="h-12 w-12 text-gray-400" />
                         </div>
                       )}
-                      
+
                       <div className="p-4">
                         <div className="flex items-center justify-between mb-2">
                           <h4 className="font-medium text-gray-900">{product.name}</h4>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            product.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                          }`}>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${product.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                            }`}>
                             {product.isActive ? 'Active' : 'Inactive'}
                           </span>
                         </div>
-                        
+
                         <p className="text-sm text-gray-600 mb-3 line-clamp-2">{product.description}</p>
-                        
+
                         <div className="space-y-2 text-sm mb-4">
                           <div className="flex justify-between">
                             <span className="text-gray-500">Price:</span>
@@ -283,7 +279,7 @@ const VendorDashboard: React.FC = () => {
                             <span className="font-medium capitalize">{product.category}</span>
                           </div>
                         </div>
-                        
+
                         <div className="flex space-x-2">
                           <button className="flex-1 flex items-center justify-center space-x-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm">
                             <Eye className="h-4 w-4" />
@@ -310,18 +306,17 @@ const VendorDashboard: React.FC = () => {
             {activeTab === 'negotiations' && (
               <div className="space-y-6">
                 <h3 className="text-lg font-medium text-gray-900">All Negotiations</h3>
-                
+
                 <div className="space-y-4">
                   {negotiations?.data?.negotiations?.map((negotiation: any) => (
                     <div key={negotiation._id} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center space-x-3">
                           <h4 className="font-medium text-gray-900">{negotiation.productId?.name}</h4>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            negotiation.status === 'active' ? 'bg-blue-100 text-blue-800' :
-                            negotiation.status === 'completed' ? 'bg-green-100 text-green-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${negotiation.status === 'active' ? 'bg-blue-100 text-blue-800' :
+                              negotiation.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                'bg-red-100 text-red-800'
+                            }`}>
                             {negotiation.status}
                           </span>
                         </div>
@@ -329,7 +324,7 @@ const VendorDashboard: React.FC = () => {
                           View Details
                         </button>
                       </div>
-                      
+
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div>
                           <p className="text-gray-500">Buyer</p>

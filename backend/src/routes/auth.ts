@@ -4,6 +4,12 @@ import Joi from 'joi';
 import User from '../models/User';
 import { auth } from '../middleware/auth';
 
+interface AuthRequest extends express.Request {
+  user?: {
+    userId: string;
+  };
+}
+
 const router = express.Router();
 
 const registerSchema = Joi.object({
@@ -56,7 +62,7 @@ router.post('/register', async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    const userResponse = user.toObject();
+    const userResponse = user.toObject() as any;
     delete userResponse.password;
 
     res.status(201).json({
@@ -107,7 +113,7 @@ router.post('/login', async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    const userResponse = user.toObject();
+    const userResponse = user.toObject() as any;
     delete userResponse.password;
 
     res.json({
@@ -126,9 +132,9 @@ router.post('/login', async (req, res) => {
 });
 
 // Get current user
-router.get('/me', auth, async (req, res) => {
+router.get('/me', auth, async (req: AuthRequest, res) => {
   try {
-    const user = await User.findById(req.user.userId).select('-password');
+    const user = await User.findById(req.user?.userId).select('-password');
     res.json({
       success: true,
       data: user

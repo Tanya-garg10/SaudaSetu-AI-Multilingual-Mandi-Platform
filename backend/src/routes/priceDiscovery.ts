@@ -124,7 +124,7 @@ router.get('/compare', async (req, res) => {
           location.trim()
         );
         return {
-          location: location.trim(),
+          locationName: location.trim(),
           ...priceData
         };
       })

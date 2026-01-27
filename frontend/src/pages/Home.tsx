@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
-import { 
-  MessageCircle, 
-  TrendingUp, 
-  Handshake, 
-  Globe, 
-  Shield, 
+import {
+  MessageCircle,
+  TrendingUp,
+  Heart as Handshake,
+  Globe,
+  Shield,
   Zap,
   ArrowRight,
   Users,
@@ -67,10 +67,10 @@ const Home: React.FC = () => {
               <span className="text-green-600"> Indian Local Markets</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Connect buyers and vendors across India with AI-powered translation, 
+              Connect buyers and vendors across India with AI-powered translation,
               smart price discovery, and intelligent negotiation tools.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {user ? (
                 <Link
@@ -200,7 +200,7 @@ const Home: React.FC = () => {
           <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
             Join thousands of buyers and vendors already using SaudaSetu AI to make smarter, fairer deals.
           </p>
-          
+
           {!user && (
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

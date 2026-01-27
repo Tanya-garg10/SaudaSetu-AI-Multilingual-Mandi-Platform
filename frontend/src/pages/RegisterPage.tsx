@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { useAuthStore } from '../stores/authStore';
-import { SUPPORTED_LANGUAGES } from '@/shared/types';
+import { SUPPORTED_LANGUAGES } from '../types/shared';
 import { Eye, EyeOff, Store } from 'lucide-react';
 
 interface RegisterForm {
@@ -166,7 +166,7 @@ const RegisterPage: React.FC = () => {
               >
                 <option value="">Select language</option>
                 {Object.entries(SUPPORTED_LANGUAGES).map(([code, name]) => (
-                  <option key={code} value={code}>{name}</option>
+                  <option key={code} value={code}>{String(name)}</option>
                 ))}
               </select>
               {errors.preferredLanguage && (
@@ -212,7 +212,7 @@ const RegisterPage: React.FC = () => {
                   Latitude
                 </label>
                 <input
-                  {...register('latitude', { 
+                  {...register('latitude', {
                     required: 'Latitude is required',
                     valueAsNumber: true,
                     min: { value: -90, message: 'Invalid latitude' },
@@ -233,7 +233,7 @@ const RegisterPage: React.FC = () => {
                   Longitude
                 </label>
                 <input
-                  {...register('longitude', { 
+                  {...register('longitude', {
                     required: 'Longitude is required',
                     valueAsNumber: true,
                     min: { value: -180, message: 'Invalid longitude' },

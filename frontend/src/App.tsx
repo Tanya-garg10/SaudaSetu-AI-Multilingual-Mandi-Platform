@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './stores/authStore';
 import Navbar from './components/Navbar';
@@ -28,33 +27,33 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/marketplace" element={<Marketplace />} />
-        <Route 
-          path="/login" 
-          element={user ? <Navigate to="/" replace /> : <LoginPage />} 
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/" replace /> : <LoginPage />}
         />
-        <Route 
-          path="/register" 
-          element={user ? <Navigate to="/" replace /> : <RegisterPage />} 
+        <Route
+          path="/register"
+          element={user ? <Navigate to="/" replace /> : <RegisterPage />}
         />
-        
+
         {/* Protected Routes */}
-        <Route 
-          path="/dashboard" 
+        <Route
+          path="/dashboard"
           element={
             user ? (
               user.role === 'buyer' ? <BuyerDashboard /> : <VendorDashboard />
             ) : (
               <Navigate to="/login" replace />
             )
-          } 
+          }
         />
-        <Route 
-          path="/negotiation/:id" 
-          element={user ? <NegotiationPage /> : <Navigate to="/login" replace />} 
+        <Route
+          path="/negotiation/:id"
+          element={user ? <NegotiationPage /> : <Navigate to="/login" replace />}
         />
-        <Route 
-          path="/profile" 
-          element={user ? <ProfilePage /> : <Navigate to="/login" replace />} 
+        <Route
+          path="/profile"
+          element={user ? <ProfilePage /> : <Navigate to="/login" replace />}
         />
       </Routes>
     </div>

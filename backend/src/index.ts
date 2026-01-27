@@ -67,7 +67,8 @@ const connectDB = async () => {
     console.log('MongoDB connected successfully');
   } catch (error) {
     console.error('MongoDB connection error:', error);
-    process.exit(1);
+    console.log('Running without database connection for demo purposes');
+    console.log('To use full functionality, please install MongoDB or use MongoDB Atlas');
   }
 };
 
@@ -76,6 +77,17 @@ const PORT = process.env.PORT || 3000;
 connectDB().then(() => {
   server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    console.log(`Frontend: http://localhost:5173`);
+    console.log(`Backend: http://localhost:${PORT}`);
+    console.log(`API: http://localhost:${PORT}/api`);
+  });
+}).catch(() => {
+  // Start server even without database for demo
+  server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT} (without database)`);
+    console.log(`Frontend: http://localhost:5173`);
+    console.log(`Backend: http://localhost:${PORT}`);
+    console.log(`API: http://localhost:${PORT}/api`);
   });
 });
 

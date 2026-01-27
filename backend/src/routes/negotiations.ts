@@ -2,7 +2,7 @@ import express from 'express';
 import Joi from 'joi';
 import Negotiation from '../models/Negotiation';
 import Product from '../models/Product';
-import { auth } from '../middleware/auth';
+import { auth, AuthRequest } from '../middleware/auth';
 import { negotiationEngine } from '../services/negotiationEngine';
 
 const router = express.Router();
@@ -23,7 +23,7 @@ const messageSchema = Joi.object({
 });
 
 // Create negotiation
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, async (req: AuthRequest, res) => {
   try {
     const { error, value } = createNegotiationSchema.validate(req.body);
     if (error) {
@@ -41,7 +41,8 @@ router.post('/', auth, async (req, res) => {
       });
     }
 
-    if (product.vendorId._id.toString() === req.user.userId) {
+    const vendorId = (product.vendorId as any)._id;
+    if (vendorId.toString() === req.user?.userId) {
       return res.status(400).json({
         success: false,
         error: 'Cannot negotiate on your own product'
@@ -50,7 +51,7 @@ router.post('/', auth, async (req, res) => {
 
     const existingNegotiation = await Negotiation.findOne({
       productId: value.productId,
-      buyerId: req.user.userId,
+      buyerId: req.user?.userId,
       status: 'active'
     });
 
@@ -63,15 +64,15 @@ router.post('/', auth, async (req, res) => {
 
     const negotiation = new Negotiation({
       productId: value.productId,
-      buyerId: req.user.userId,
-      vendorId: product.vendorId._id,
+      buyerId: req.user?.userId,
+      vendorId: vendorId,
       currentOffer: {
         price: value.initialOffer.price,
         quantity: value.initialOffer.quantity,
-        proposedBy: req.user.userId
+        proposedBy: req.user?.userId
       },
       messages: [{
-        senderId: req.user.userId,
+        senderId: req.user?.userId,
         message: value.message,
         offerPrice: value.initialOffer.price,
         offerQuantity: value.initialOffer.quantity,
@@ -99,14 +100,14 @@ router.post('/', auth, async (req, res) => {
 });
 
 // Get user's negotiations
-router.get('/', auth, async (req, res) => {
+router.get('/', auth, async (req: AuthRequest, res) => {
   try {
     const { status, page = 1, limit = 20 } = req.query;
 
     const filter: any = {
       $or: [
-        { buyerId: req.user.userId },
-        { vendorId: req.user.userId }
+        { buyerId: req.user?.userId },
+        { vendorId: req.user?.userId }
       ]
     };
 
@@ -145,13 +146,13 @@ router.get('/', auth, async (req, res) => {
 });
 
 // Get negotiation by ID
-router.get('/:id', auth, async (req, res) => {
+router.get('/:id', auth, async (req: AuthRequest, res) => {
   try {
     const negotiation = await Negotiation.findOne({
       _id: req.params.id,
       $or: [
-        { buyerId: req.user.userId },
-        { vendorId: req.user.userId }
+        { buyerId: req.user?.userId },
+        { vendorId: req.user?.userId }
       ]
     }).populate([
       { path: 'productId', select: 'name currentPrice unit images' },
@@ -180,7 +181,7 @@ router.get('/:id', auth, async (req, res) => {
 });
 
 // Add message to negotiation
-router.post('/:id/messages', auth, async (req, res) => {
+router.post('/:id/messages', auth, async (req: AuthRequest, res) => {
   try {
     const { error, value } = messageSchema.validate(req.body);
     if (error) {
@@ -193,8 +194,8 @@ router.post('/:id/messages', auth, async (req, res) => {
     const negotiation = await Negotiation.findOne({
       _id: req.params.id,
       $or: [
-        { buyerId: req.user.userId },
-        { vendorId: req.user.userId }
+        { buyerId: req.user?.userId },
+        { vendorId: req.user?.userId }
       ],
       status: 'active'
     });
@@ -207,7 +208,7 @@ router.post('/:id/messages', auth, async (req, res) => {
     }
 
     const message = {
-      senderId: req.user.userId,
+      senderId: req.user?.userId,
       message: value.message,
       offerPrice: value.offerPrice,
       offerQuantity: value.offerQuantity,
@@ -220,24 +221,8 @@ router.post('/:id/messages', auth, async (req, res) => {
       negotiation.currentOffer = {
         price: value.offerPrice,
         quantity: value.offerQuantity,
-        proposedBy: req.user.userId
+        proposedBy: req.user?.userId as any
       };
-
-      // Use negotiation engine to suggest counter-offer
-      const suggestion = await negotiationEngine.suggestCounterOffer(
-        negotiation._id.toString(),
-        value.offerPrice,
-        value.offerQuantity
-      );
-
-      if (suggestion) {
-        // Add AI suggestion as system message
-        negotiation.messages.push({
-          senderId: req.user.userId,
-          message: `AI Suggestion: ${suggestion.reasoning}`,
-          timestamp: new Date()
-        } as any);
-      }
     }
 
     await negotiation.save();
@@ -255,13 +240,13 @@ router.post('/:id/messages', auth, async (req, res) => {
 });
 
 // Accept/Complete negotiation
-router.post('/:id/complete', auth, async (req, res) => {
+router.post('/:id/complete', auth, async (req: AuthRequest, res) => {
   try {
     const negotiation = await Negotiation.findOne({
       _id: req.params.id,
       $or: [
-        { buyerId: req.user.userId },
-        { vendorId: req.user.userId }
+        { buyerId: req.user?.userId },
+        { vendorId: req.user?.userId }
       ],
       status: 'active'
     });
@@ -292,13 +277,13 @@ router.post('/:id/complete', auth, async (req, res) => {
 });
 
 // Cancel negotiation
-router.post('/:id/cancel', auth, async (req, res) => {
+router.post('/:id/cancel', auth, async (req: AuthRequest, res) => {
   try {
     const negotiation = await Negotiation.findOne({
       _id: req.params.id,
       $or: [
-        { buyerId: req.user.userId },
-        { vendorId: req.user.userId }
+        { buyerId: req.user?.userId },
+        { vendorId: req.user?.userId }
       ],
       status: 'active'
     });

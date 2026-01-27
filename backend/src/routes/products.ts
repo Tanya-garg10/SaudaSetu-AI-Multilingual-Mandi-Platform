@@ -1,7 +1,7 @@
 import express from 'express';
 import Joi from 'joi';
 import Product from '../models/Product';
-import { auth } from '../middleware/auth';
+import { auth, AuthRequest } from '../middleware/auth';
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ const productSchema = Joi.object({
 });
 
 // Create product (vendors only)
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, async (req: AuthRequest, res) => {
   try {
     const { error, value } = productSchema.validate(req.body);
     if (error) {
@@ -37,7 +37,7 @@ router.post('/', auth, async (req, res) => {
 
     const product = new Product({
       ...value,
-      vendorId: req.user.userId
+      vendorId: req.user?.userId
     });
 
     await product.save();
@@ -142,7 +142,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update product (vendor only)
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', auth, async (req: AuthRequest, res) => {
   try {
     const { error, value } = productSchema.validate(req.body);
     if (error) {
@@ -153,7 +153,7 @@ router.put('/:id', auth, async (req, res) => {
     }
 
     const product = await Product.findOneAndUpdate(
-      { _id: req.params.id, vendorId: req.user.userId },
+      { _id: req.params.id, vendorId: req.user?.userId },
       value,
       { new: true }
     ).populate('vendorId', 'name email phone');
@@ -178,10 +178,10 @@ router.put('/:id', auth, async (req, res) => {
 });
 
 // Delete product (vendor only)
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', auth, async (req: AuthRequest, res) => {
   try {
     const product = await Product.findOneAndUpdate(
-      { _id: req.params.id, vendorId: req.user.userId },
+      { _id: req.params.id, vendorId: req.user?.userId },
       { isActive: false },
       { new: true }
     );

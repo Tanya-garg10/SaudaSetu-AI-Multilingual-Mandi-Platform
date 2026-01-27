@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { useAuthStore } from '../stores/authStore';
-import { SUPPORTED_LANGUAGES } from '@/shared/types';
+import { SUPPORTED_LANGUAGES } from '../types/shared';
 import { User, MapPin, Phone, Mail, Globe, Edit, Save, X } from 'lucide-react';
 
 interface ProfileForm {
@@ -99,8 +99,8 @@ const ProfilePage: React.FC = () => {
                                 <p className="text-gray-600">{user.email}</p>
                                 <div className="mt-4">
                                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${user.role === 'buyer'
-                                            ? 'bg-blue-100 text-blue-800'
-                                            : 'bg-green-100 text-green-800'
+                                        ? 'bg-blue-100 text-blue-800'
+                                        : 'bg-green-100 text-green-800'
                                         }`}>
                                         {user.role === 'buyer' ? 'Buyer' : 'Vendor'}
                                     </span>
@@ -235,7 +235,7 @@ const ProfilePage: React.FC = () => {
                                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
                                         >
                                             {Object.entries(SUPPORTED_LANGUAGES).map(([code, name]) => (
-                                                <option key={code} value={code}>{name}</option>
+                                                <option key={code} value={code}>{String(name)}</option>
                                             ))}
                                         </select>
                                         {errors.preferredLanguage && (

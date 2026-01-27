@@ -12,8 +12,7 @@ import {
     MessageCircle,
     DollarSign,
     Package,
-    User,
-    Clock
+    User
 } from 'lucide-react';
 
 const NegotiationPage: React.FC = () => {
@@ -84,11 +83,11 @@ const NegotiationPage: React.FC = () => {
             socketService.joinNegotiation(id);
 
             // Set up socket listeners
-            socketService.onMessage((data) => {
+            socketService.onMessage(() => {
                 queryClient.invalidateQueries(['negotiation', id]);
             });
 
-            socketService.onOffer((data) => {
+            socketService.onOffer(() => {
                 queryClient.invalidateQueries(['negotiation', id]);
                 toast.success('New offer received!');
             });
@@ -199,8 +198,8 @@ const NegotiationPage: React.FC = () => {
                     <div className="flex items-center justify-between mb-4">
                         <h1 className="text-2xl font-bold text-gray-900">Negotiation</h1>
                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${neg.status === 'active' ? 'bg-blue-100 text-blue-800' :
-                                neg.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                    'bg-red-100 text-red-800'
+                            neg.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                'bg-red-100 text-red-800'
                             }`}>
                             {neg.status}
                         </span>
@@ -264,8 +263,8 @@ const NegotiationPage: React.FC = () => {
                             return (
                                 <div key={index} className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}>
                                     <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${isOwnMessage
-                                            ? 'bg-green-600 text-white'
-                                            : 'bg-gray-200 text-gray-900'
+                                        ? 'bg-green-600 text-white'
+                                        : 'bg-gray-200 text-gray-900'
                                         }`}>
                                         <p className="text-sm">{msg.message}</p>
                                         {msg.translatedMessage && msg.translatedMessage !== msg.message && (

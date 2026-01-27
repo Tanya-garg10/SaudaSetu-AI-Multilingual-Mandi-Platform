@@ -1,4 +1,4 @@
-import { SUPPORTED_LANGUAGES, SupportedLanguage } from '../../../shared/types';
+import { SUPPORTED_LANGUAGES, SupportedLanguage } from '../types/shared';
 
 interface TranslationResult {
   translatedText: string;
@@ -138,7 +138,7 @@ class TranslationService {
     toLanguage: SupportedLanguage
   ): Promise<TranslationResult> {
     const cacheKey = `${text}-${fromLanguage}-${toLanguage}`;
-    
+
     if (this.cache.has(cacheKey)) {
       return this.cache.get(cacheKey)!;
     }
@@ -171,7 +171,7 @@ class TranslationService {
     await new Promise(resolve => setTimeout(resolve, 100));
 
     const lowerText = text.toLowerCase().trim();
-    
+
     // Check for exact matches in our dictionary
     if (this.translations[lowerText] && this.translations[lowerText][toLanguage]) {
       return this.translations[lowerText][toLanguage]!;

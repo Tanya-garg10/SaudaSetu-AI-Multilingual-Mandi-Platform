@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { User, AuthResponse } from '@/shared/types';
+import { User } from '../types/shared';
 import { authApi } from '../services/api';
 
 interface AuthState {
@@ -24,12 +24,12 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true });
         try {
           const response = await authApi.login({ email, password });
-          const { user, token } = response.data;
-          
-          set({ 
-            user, 
-            token, 
-            isLoading: false 
+          const { user, token } = response.data as any;
+
+          set({
+            user,
+            token,
+            isLoading: false
           });
         } catch (error) {
           set({ isLoading: false });
@@ -41,12 +41,12 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true });
         try {
           const response = await authApi.register(userData);
-          const { user, token } = response.data;
-          
-          set({ 
-            user, 
-            token, 
-            isLoading: false 
+          const { user, token } = response.data as any;
+
+          set({
+            user,
+            token,
+            isLoading: false
           });
         } catch (error) {
           set({ isLoading: false });
@@ -55,27 +55,27 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
-        set({ 
-          user: null, 
-          token: null, 
-          isLoading: false 
+        set({
+          user: null,
+          token: null,
+          isLoading: false
         });
       },
 
       updateUser: (userData: Partial<User>) => {
         const currentUser = get().user;
         if (currentUser) {
-          set({ 
-            user: { ...currentUser, ...userData } 
+          set({
+            user: { ...currentUser, ...userData }
           });
         }
       },
     }),
     {
       name: 'auth-storage',
-      partialize: (state) => ({ 
-        user: state.user, 
-        token: state.token 
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token
       }),
     }
   )
