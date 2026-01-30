@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { productsApi } from '../services/api';
 import { Product } from '../types/shared';
 import { Search, Filter, MapPin, TrendingUp } from 'lucide-react';
+import AIMarketInsights from '../components/AIMarketInsights';
 
 const Marketplace: React.FC = () => {
   const [filters, setFilters] = useState({
@@ -24,7 +25,13 @@ const Marketplace: React.FC = () => {
     ['products', filters, page],
     () => productsApi.getProducts({ ...filters, page, limit: 12 }),
     {
-      keepPreviousData: true
+      keepPreviousData: true,
+      onSuccess: (data) => {
+        console.log('Products loaded successfully:', data);
+      },
+      onError: (error) => {
+        console.error('Error loading products:', error);
+      }
     }
   );
 
@@ -70,6 +77,11 @@ const Marketplace: React.FC = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Marketplace</h1>
           <p className="text-gray-600">Discover fresh products from local vendors across India</p>
+        </div>
+
+        {/* AI Market Insights */}
+        <div className="mb-8">
+          <AIMarketInsights />
         </div>
 
         {/* Search and Filters */}
@@ -185,6 +197,9 @@ const Marketplace: React.FC = () => {
           <div className="text-center py-12">
             <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
             <p className="text-gray-600">Try adjusting your search or filters</p>
+            <div className="mt-4 text-sm text-gray-500">
+              Debug: {JSON.stringify({ hasData: !!data, productsLength: data?.data?.products?.length, error: error?.message })}
+            </div>
           </div>
         ) : (
           <>

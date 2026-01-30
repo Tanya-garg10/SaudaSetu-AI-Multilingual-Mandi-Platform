@@ -19,6 +19,7 @@ const priceDiscovery_1 = __importDefault(require("./routes/priceDiscovery"));
 const translation_1 = __importDefault(require("./routes/translation"));
 const handlers_1 = require("./socket/handlers");
 const errorHandler_1 = require("./middleware/errorHandler");
+const mockData_1 = require("./data/mockData");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const server = (0, http_1.createServer)(app);
@@ -69,7 +70,9 @@ const connectDB = async () => {
     }
 };
 const PORT = process.env.PORT || 3000;
-connectDB().then(() => {
+connectDB().then(async () => {
+    // Create mock data after database connection
+    await (0, mockData_1.createMockData)();
     server.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
         console.log(`Frontend: http://localhost:5173`);

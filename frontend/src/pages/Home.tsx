@@ -10,7 +10,9 @@ import {
   Zap,
   ArrowRight,
   Users,
-  BarChart3
+  BarChart3,
+  ShoppingCart,
+  Store
 } from 'lucide-react';
 
 const Home: React.FC = () => {
@@ -224,3 +226,80 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+{/* Quick Demo Section */ }
+<section className="py-16 bg-gray-100">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="text-center mb-12">
+      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        🚀 Demo Account से शुरू करें
+      </h2>
+      <p className="text-xl text-gray-600">
+        Platform को explore करने के लिए ready-made accounts का उपयोग करें
+      </p>
+    </div>
+
+    <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-xl border border-blue-200">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <ShoppingCart className="h-8 w-8 text-white" />
+          </div>
+          <h3 className="text-xl font-semibold text-gray-900 mb-3">🛒 Buyer Account</h3>
+          <p className="text-gray-600 mb-6">
+            Products browse करें, negotiate करें, और deals complete करें
+          </p>
+          <div className="bg-white p-4 rounded-lg mb-4 text-left border">
+            <p className="text-sm text-gray-600 mb-2 font-semibold">Demo Login Credentials:</p>
+            <p className="text-sm font-mono bg-gray-100 p-2 rounded">amit.kumar@example.com</p>
+            <p className="text-sm font-mono bg-gray-100 p-2 rounded mt-1">password123</p>
+          </div>
+          <Link
+            to="/login"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold inline-block transition-colors"
+          >
+            Buyer Login करें
+          </Link>
+        </div>
+      </div>
+
+      <div className="bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-xl border border-green-200">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Store className="h-8 w-8 text-white" />
+          </div>
+          <h3 className="text-xl font-semibold text-gray-900 mb-3">🏪 Vendor Account</h3>
+          <p className="text-gray-600 mb-6">
+            Products add करें, sales track करें, और customers से negotiate करें
+          </p>
+          <div className="bg-white p-4 rounded-lg mb-4 text-left border">
+            <p className="text-sm text-gray-600 mb-2 font-semibold">Demo Login Credentials:</p>
+            <p className="text-sm font-mono bg-gray-100 p-2 rounded">ram.sharma@example.com</p>
+            <p className="text-sm font-mono bg-gray-100 p-2 rounded mt-1">password123</p>
+          </div>
+          <Link
+            to="/login"
+            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold inline-block transition-colors"
+          >
+            Vendor Login करें
+          </Link>
+        </div>
+      </div>
+    </div>
+
+    <div className="text-center mt-12">
+      <div className="bg-white p-6 rounded-xl shadow-sm border max-w-2xl mx-auto">
+        <h4 className="text-lg font-semibold text-gray-900 mb-3">🆕 नया Account बनाना चाहते हैं?</h4>
+        <p className="text-gray-600 mb-4">
+          अपना खुद का account बनाएं और SaudaSetu AI के सभी features का फायदा उठाएं
+        </p>
+        <Link
+          to="/register"
+          className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white px-8 py-3 rounded-lg text-lg font-semibold inline-block transition-all"
+        >
+          🚀 Register करें
+        </Link>
+      </div>
+    </div>
+  </div>
+</section>

@@ -14,6 +14,7 @@ import priceDiscoveryRoutes from './routes/priceDiscovery';
 import translationRoutes from './routes/translation';
 import { setupSocketHandlers } from './socket/handlers';
 import { errorHandler } from './middleware/errorHandler';
+import { createMockData } from './data/mockData';
 
 dotenv.config();
 
@@ -74,7 +75,10 @@ const connectDB = async () => {
 
 const PORT = process.env.PORT || 3000;
 
-connectDB().then(() => {
+connectDB().then(async () => {
+  // Create mock data after database connection
+  await createMockData();
+
   server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Frontend: http://localhost:5173`);

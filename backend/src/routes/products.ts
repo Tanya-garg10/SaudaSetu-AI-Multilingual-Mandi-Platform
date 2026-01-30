@@ -77,7 +77,10 @@ router.get('/', async (req, res) => {
     if (city) filter['location.city'] = new RegExp(city as string, 'i');
     if (state) filter['location.state'] = new RegExp(state as string, 'i');
     if (search) {
-      filter.$text = { $search: search as string };
+      filter.$or = [
+        { name: new RegExp(search as string, 'i') },
+        { description: new RegExp(search as string, 'i') }
+      ];
     }
     if (minPrice || maxPrice) {
       filter.currentPrice = {};

@@ -1,8 +1,12 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './stores/authStore';
 import Navbar from './components/Navbar';
+import AIChatbot from './components/AIChatbot';
+import NotificationBanner from './components/NotificationBanner';
+import WelcomeMessage from './components/WelcomeMessage';
 import Home from './pages/Home';
 import Marketplace from './pages/Marketplace';
+import ProductDetail from './pages/ProductDetail';
 import BuyerDashboard from './pages/BuyerDashboard';
 import VendorDashboard from './pages/VendorDashboard';
 import NegotiationPage from './pages/NegotiationPage';
@@ -23,10 +27,12 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <NotificationBanner />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/marketplace" element={<Marketplace />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
         <Route
           path="/login"
           element={user ? <Navigate to="/" replace /> : <LoginPage />}
@@ -56,6 +62,12 @@ function App() {
           element={user ? <ProfilePage /> : <Navigate to="/login" replace />}
         />
       </Routes>
+
+      {/* AI Chatbot - Available on all pages */}
+      <AIChatbot />
+
+      {/* Welcome Message - Shows on first visit */}
+      <WelcomeMessage />
     </div>
   );
 }

@@ -84,8 +84,12 @@ export interface TranslationRequest {
 }
 
 export interface TranslationResponse {
+    originalText?: string;
     translatedText: string;
+    sourceLanguage?: string;
+    targetLanguage?: string;
     confidence: number;
+    isMarketTerm?: boolean;
 }
 
 export interface SocketEvents {
