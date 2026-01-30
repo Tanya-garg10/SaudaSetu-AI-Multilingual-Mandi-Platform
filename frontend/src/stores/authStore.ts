@@ -21,9 +21,12 @@ export const useAuthStore = create<AuthState>()(
       isLoading: false,
 
       login: async (email: string, password: string) => {
+        console.log('Auth store login called with:', email);
         set({ isLoading: true });
         try {
+          console.log('Making API call to:', `${import.meta.env.VITE_API_URL || 'http://localhost:3000/api'}/auth/login`);
           const response = await authApi.login({ email, password });
+          console.log('Login API response:', response);
           const { user, token } = response.data as any;
 
           set({
@@ -31,7 +34,9 @@ export const useAuthStore = create<AuthState>()(
             token,
             isLoading: false
           });
+          console.log('Auth state updated successfully');
         } catch (error) {
+          console.error('Auth store login error:', error);
           set({ isLoading: false });
           throw error;
         }

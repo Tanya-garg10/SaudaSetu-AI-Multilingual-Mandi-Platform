@@ -22,11 +22,15 @@ const LoginPage: React.FC = () => {
   } = useForm<LoginForm>();
 
   const onSubmit = async (data: LoginForm) => {
+    console.log('Login attempt with:', data.email);
     try {
       await login(data.email, data.password);
+      console.log('Login successful');
       toast.success('Login successful!');
       navigate('/dashboard');
     } catch (error: any) {
+      console.error('Login error:', error);
+      console.error('Error response:', error.response?.data);
       toast.error(error.response?.data?.error || 'Login failed');
     }
   };

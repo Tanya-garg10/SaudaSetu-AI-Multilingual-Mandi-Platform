@@ -1,0 +1,13 @@
+# Python dependencies for SaudaSetu AI Platform
+# Currently no Python dependencies required
+# This file is for future Python-based AI services
+
+# Future AI/ML dependencies:
+# numpy==1.24.3
+# pandas==2.0.3
+# scikit-learn==1.3.0
+# tensorflow==2.13.0
+# transformers==4.30.2
+# torch==2.0.1
+# fastapi==0.100.0
+# uvicorn==0.22.0
