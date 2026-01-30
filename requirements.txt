@@ -1,8 +1,8 @@
-# Python dependencies for SaudaSetu AI Platform
-# Currently no Python dependencies required
-# This file is for future Python-based AI services
+# SaudaSetu AI Platform - Python Requirements
+# This is primarily a Node.js project
+# Python requirements are for future AI/ML services
 
-# Future AI/ML dependencies:
+# Future AI/ML dependencies (not currently used):
 # numpy==1.24.3
 # pandas==2.0.3
 # scikit-learn==1.3.0
@@ -11,3 +11,7 @@
 # torch==2.0.1
 # fastapi==0.100.0
 # uvicorn==0.22.0
+
+# Note: Main application uses Node.js
+# See package.json files for Node.js dependencies
+# For deployment, use Node.js environment, not Python
