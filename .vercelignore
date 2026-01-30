@@ -1,0 +1,10 @@
+backend/
+shared/
+scripts/
+docs/
+node_modules/
+.git/
+.kiro/
+.vscode/
+*.md
+*.log
