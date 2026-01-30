@@ -5,7 +5,6 @@ import { useAuthStore } from '../stores/authStore';
 let socket: Socket | null = null;
 
 export const useSocket = () => {
-    const [isConnected, setIsConnected] = useState(false);
     const { token } = useAuthStore();
 
     useEffect(() => {
@@ -20,17 +19,14 @@ export const useSocket = () => {
 
             socket.on('connect', () => {
                 console.log('Socket connected');
-                setIsConnected(true);
             });
 
             socket.on('disconnect', () => {
                 console.log('Socket disconnected');
-                setIsConnected(false);
             });
 
             socket.on('connect_error', (error) => {
                 console.error('Socket connection error:', error);
-                setIsConnected(false);
             });
         }
 
@@ -38,7 +34,6 @@ export const useSocket = () => {
             if (socket && !token) {
                 socket.disconnect();
                 socket = null;
-                setIsConnected(false);
             }
         };
     }, [token]);

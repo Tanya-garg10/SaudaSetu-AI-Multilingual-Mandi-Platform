@@ -20,18 +20,7 @@ import {
 import { negotiationsApi } from '../services/api';
 import { useAuthStore } from '../stores/authStore';
 import { useSocket } from '../hooks/useSocket';
-
-interface Message {
-    _id: string;
-    senderId: string;
-    message: string;
-    translatedMessage?: string;
-    offerPrice?: number;
-    offerQuantity?: number;
-    timestamp: string;
-    senderName?: string;
-    senderRole?: 'buyer' | 'vendor';
-}
+import { NegotiationMessage } from '../types/shared';
 
 interface AISuggestion {
     suggestedPrice: number;
@@ -115,13 +104,13 @@ const EnhancedNegotiationChat: React.FC = () => {
         socket.emit('negotiation:join', id);
 
         // Listen for new messages
-        socket.on('negotiation:message', (data: any) => {
+        socket.on('negotiation:message', () => {
             queryClient.invalidateQueries(['negotiation', id]);
         });
 
         // Listen for typing indicators
         socket.on('negotiation:typing', (data: { userId: string; isTyping: boolean }) => {
-            if (data.userId !== user?.id) {
+            if (data.userId !== user?._id) {
                 setTypingUsers(prev =>
                     data.isTyping
                         ? [...prev.filter(u => u !== data.userId), data.userId]
@@ -154,7 +143,7 @@ const EnhancedNegotiationChat: React.FC = () => {
             socket.off('price_discovery');
             socket.emit('negotiation:leave', id);
         };
-    }, [socket, id, user?.id, queryClient]);
+    }, [socket, id, user?._id, queryClient]);
 
     // Auto-scroll to bottom
     useEffect(() => {
@@ -208,9 +197,9 @@ const EnhancedNegotiationChat: React.FC = () => {
     // Request price discovery
     const requestPriceDiscovery = () => {
         if (socket && id && negotiation?.data?.productId) {
+            // Since productId is a string, we need to get product details separately
             socket.emit('request_price_discovery', {
-                category: negotiation.data.productId.category,
-                location: `${negotiation.data.productId.location.city}, ${negotiation.data.productId.location.state}`
+                negotiationId: id
             });
             setShowPriceDiscovery(true);
         }
@@ -233,7 +222,7 @@ const EnhancedNegotiationChat: React.FC = () => {
         );
     }
 
-    const { productId, messages, currentOffer, status } = negotiation.data;
+    const { messages, currentOffer, status } = negotiation.data;
     const isCompleted = status === 'completed';
     const userRole = user?.role;
 
@@ -244,7 +233,7 @@ const EnhancedNegotiationChat: React.FC = () => {
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                            {productId.name} - Negotiation
+                            Negotiation
                         </h1>
                         <div className="flex items-center space-x-4 text-sm text-gray-600">
                             <span className="flex items-center">
@@ -257,7 +246,7 @@ const EnhancedNegotiationChat: React.FC = () => {
                             </span>
                             <span className="flex items-center">
                                 <Target className="h-4 w-4 mr-1" />
-                                Current: ₹{currentOffer.price}/{productId.unit}
+                                Current: ₹{currentOffer.price}
                             </span>
                         </div>
                     </div>
@@ -295,26 +284,26 @@ const EnhancedNegotiationChat: React.FC = () => {
                     <div className="bg-white rounded-lg shadow-sm">
                         {/* Messages */}
                         <div className="h-96 overflow-y-auto p-4 space-y-4">
-                            {messages.map((msg: Message) => (
+                            {messages.map((msg: NegotiationMessage) => (
                                 <div
                                     key={msg._id}
-                                    className={`flex ${msg.senderId === user?.id ? 'justify-end' : 'justify-start'}`}
+                                    className={`flex ${msg.senderId === user?._id ? 'justify-end' : 'justify-start'}`}
                                 >
                                     <div
-                                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${msg.senderId === user?.id
-                                                ? 'bg-blue-600 text-white'
-                                                : 'bg-gray-100 text-gray-900'
+                                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${msg.senderId === user?._id
+                                            ? 'bg-blue-600 text-white'
+                                            : 'bg-gray-100 text-gray-900'
                                             }`}
                                     >
                                         <div className="text-sm font-medium mb-1">
-                                            {msg.senderName} ({msg.senderRole})
+                                            {msg.senderId === user?._id ? 'You' : 'Other User'}
                                         </div>
                                         <div className="text-sm">
                                             {autoTranslate && msg.translatedMessage ? msg.translatedMessage : msg.message}
                                         </div>
                                         {msg.offerPrice && msg.offerQuantity && (
                                             <div className="mt-2 p-2 bg-white bg-opacity-20 rounded text-xs">
-                                                <strong>Offer:</strong> ₹{msg.offerPrice} for {msg.offerQuantity} {productId.unit}
+                                                <strong>Offer:</strong> ₹{msg.offerPrice} for {msg.offerQuantity} units
                                             </div>
                                         )}
                                         {autoTranslate && msg.translatedMessage && (
@@ -372,7 +361,7 @@ const EnhancedNegotiationChat: React.FC = () => {
                                     />
                                     <input
                                         type="number"
-                                        placeholder={`Quantity (${productId.unit})`}
+                                        placeholder="Quantity"
                                         value={offerQuantity}
                                         onChange={(e) => setOfferQuantity(e.target.value ? Number(e.target.value) : '')}
                                         className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -541,7 +530,7 @@ const EnhancedNegotiationChat: React.FC = () => {
                                     </div>
                                     <div className="flex items-center mt-1">
                                         <TrendingUp className={`h-4 w-4 mr-1 ${priceDiscovery.marketTrend === 'rising' ? 'text-red-500' :
-                                                priceDiscovery.marketTrend === 'falling' ? 'text-green-500' : 'text-gray-500'
+                                            priceDiscovery.marketTrend === 'falling' ? 'text-green-500' : 'text-gray-500'
                                             }`} />
                                         <span className="text-sm capitalize">{priceDiscovery.marketTrend}</span>
                                     </div>
@@ -551,7 +540,7 @@ const EnhancedNegotiationChat: React.FC = () => {
                                     <div className="bg-gray-50 p-2 rounded">
                                         <div className="font-medium">Demand</div>
                                         <div className={`capitalize ${priceDiscovery.aiInsights.demandLevel === 'high' ? 'text-red-600' :
-                                                priceDiscovery.aiInsights.demandLevel === 'medium' ? 'text-yellow-600' : 'text-green-600'
+                                            priceDiscovery.aiInsights.demandLevel === 'medium' ? 'text-yellow-600' : 'text-green-600'
                                             }`}>
                                             {priceDiscovery.aiInsights.demandLevel}
                                         </div>
@@ -559,7 +548,7 @@ const EnhancedNegotiationChat: React.FC = () => {
                                     <div className="bg-gray-50 p-2 rounded">
                                         <div className="font-medium">Supply</div>
                                         <div className={`capitalize ${priceDiscovery.aiInsights.supplyStatus === 'scarce' ? 'text-red-600' :
-                                                priceDiscovery.aiInsights.supplyStatus === 'normal' ? 'text-yellow-600' : 'text-green-600'
+                                            priceDiscovery.aiInsights.supplyStatus === 'normal' ? 'text-yellow-600' : 'text-green-600'
                                             }`}>
                                             {priceDiscovery.aiInsights.supplyStatus}
                                         </div>

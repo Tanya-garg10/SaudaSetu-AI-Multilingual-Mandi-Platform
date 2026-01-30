@@ -163,7 +163,7 @@ const ProductDetail: React.FC = () => {
                                         <User className="h-6 w-6 text-green-600" />
                                     </div>
                                     <div>
-                                        <div className="font-medium text-gray-900">{product.vendorId?.name || 'Vendor'}</div>
+                                        <div className="font-medium text-gray-900">Vendor</div>
                                         <div className="flex items-center text-sm text-gray-500">
                                             <MapPin className="h-4 w-4 mr-1" />
                                             {product.location.city}, {product.location.state}
