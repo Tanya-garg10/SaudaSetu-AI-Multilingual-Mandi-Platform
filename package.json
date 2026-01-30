@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "AI-powered platform for Indian local markets",
   "main": "index.js",
+  "private": true,
+  "license": "MIT",
   "scripts": {
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "cd backend && npm run dev",
@@ -16,10 +18,5 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
-  },
-  "workspaces": [
-    "backend",
-    "frontend",
-    "shared"
-  ]
+  }
 }

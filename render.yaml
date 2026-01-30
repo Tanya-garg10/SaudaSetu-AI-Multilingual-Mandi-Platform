@@ -4,7 +4,7 @@ services:
     name: saudasetu-backend
     env: node
     plan: free
-    buildCommand: cd backend && npm install && npm run build
+    buildCommand: cd backend && npm ci && npm run build
     startCommand: cd backend && npm start
     envVars:
       - key: NODE_ENV
@@ -20,22 +20,11 @@ services:
       - key: FRONTEND_URL
         value: https://saudasetu-frontend.onrender.com
 
-  # Database
-  - type: pserv
-    name: saudasetu-db
-    env: docker
-    plan: free
-    dockerfilePath: ./Dockerfile.mongo
-    disk:
-      name: mongo-data
-      mountPath: /data/db
-      sizeGB: 1
-
-  # Frontend Service (if deploying separately)
+  # Frontend Service
   - type: web
     name: saudasetu-frontend
     env: static
-    buildCommand: cd frontend && npm install && npm run build
+    buildCommand: cd frontend && npm ci && npm run build
     staticPublishPath: frontend/dist
     envVars:
       - key: VITE_API_URL

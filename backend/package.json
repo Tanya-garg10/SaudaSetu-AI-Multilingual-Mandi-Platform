@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Backend for SaudaSetu AI platform",
   "main": "dist/index.js",
+  "license": "MIT",
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "tsc",
